@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Real-Time Object Detection</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+      h1 {
+        color: #333;
+      }
+      #video-container {
+        border: 5px solid #333;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        min-width: 640px;
+        min-height: 480px;
+        background-color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #video-feed {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 5px;
+      }
+      #status {
+        margin-top: 15px;
+        font-size: 1.2em;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Real-Time Object Detection (via WebSocket)</h1>
+    <div id="video-container">
+      <img id="video-feed" src="" alt="Loading video stream..." />
+    </div>
+    <p id="status">Connecting to server...</p>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const videoFeed = document.getElementById("video-feed");
+        const statusText = document.getElementById("status");
+
+        // 构建WebSocket URL
+        // 如果你的服务器和页面在同一个地方，可以用相对路径
+        // 'ws://' + window.location.host + '/ws'
+        const ws_protocol =
+          window.location.protocol === "https:" ? "wss:" : "ws:";
+        const ws_url = ws_protocol + "//" + window.location.host + "/ws";
+
+        const ws = new WebSocket(ws_url);
+
+        ws.onopen = function (event) {
+          console.log("WebSocket connection opened.");
+          statusText.textContent = "Connection established. Streaming video...";
+        };
+
+        ws.onmessage = function (event) {
+          // 服务器发送的是二进制数据 (Blob)
+          // 我们需要把它转换成一个URL，以便<img>标签可以显示
+          const url = URL.createObjectURL(event.data);
+          videoFeed.src = url;
+
+          // 释放上一个URL以避免内存泄漏
+          videoFeed.onload = () => {
+            URL.revokeObjectURL(url);
+          };
+        };
+
+        ws.onclose = function (event) {
+          console.log("WebSocket connection closed.", event);
+          statusText.textContent =
+            "Connection closed. Please refresh the page.";
+          videoFeed.src = ""; // 清空图像
+        };
+
+        ws.onerror = function (error) {
+          console.error("WebSocket error observed:", error);
+          statusText.textContent = "An error occurred with the connection.";
+        };
+      });
+    </script>
+  </body>
+</html>
