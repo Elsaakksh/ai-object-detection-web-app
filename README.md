@@ -2,9 +2,6 @@
 
 这是一个基于 **YOLOv8**、**FastAPI** 和 **WebSockets** 构建的实时 AI 目标检测 Web 应用。它能够捕获你的摄像头视频流，通过 AI 模型实时识别画面中的物体，并在浏览器上展示标注后的视频。
 
-![Project Demo](https://user-images.githubusercontent.com/your-username/your-repo/assets/demo.gif)  
-_(提示: 你可以录制一个简短的 GIF 动图来替换这里，展示你的应用运行效果。可以使用[ScreenToGif](https://www.screentogif.com/)等工具)_
-
 ---
 
 ## ✨ 功能特性
@@ -30,8 +27,8 @@ _(提示: 你可以录制一个简短的 GIF 动图来替换这里，展示你�
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/Elsaakksh/ai-object-detection-web-app.git
+cd ai-object-detection-web-app
 
 
 2. 创建并激活虚拟环境
